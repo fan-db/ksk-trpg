@@ -195,7 +195,7 @@
             </div>
         </div>
 
-        <template x-if="filteredStreams().length === 0">
+        <template x-if="filteredStreams().length === 0 && updatedAt !== '同期中...'">
             <div class="bg-white rounded-2xl border border-pink-100 p-12 text-center text-slate-400 font-medium shadow-xs">該当する配信データが見つかりません。</div>
         </template>
 
