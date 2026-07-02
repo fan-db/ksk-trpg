@@ -267,23 +267,21 @@
                     }
                 },
 
-                // リンクが複数あっても、確実に最初のYouTubeリンクを仕留めるロジック
+                // 完全にURLの中身だけでYouTubeリンクを仕留める超天才ロジック
                 getYoutubeId(links) {
                     if (!links || links.length === 0) return null;
                     
-                    // 1. まず配列の「すべての要素」から、名前に「YouTube」が入っているものを根こそぎ探す
-                    const ytLink = links.find(l => l.label && l.label.toLowerCase().includes('youtube'));
+                    // 名前に頼らず、URLの中に youtube.com または youtu.be が含まれている最初のリンクを探す
+                    const ytLink = links.find(l => l.url && (l.url.includes('youtube.com') || l.url.includes('youtu.be')));
                     if (!ytLink || !ytLink.url) return null;
 
                     const url = ytLink.url.trim();
                     
-                    // 2. 通常の watch?v= 形式
                     if (url.includes('watch?v=')) {
                         const parts = url.split('v=');
                         if (parts[1]) return parts[1].split('&')[0];
                     }
                     
-                    // 3. /live/, /shorts/, /embed/ 形式をすべてカバー
                     const pathTypes = ['/live/', '/shorts/', '/embed/'];
                     for (const type of pathTypes) {
                         if (url.includes(type)) {
@@ -292,7 +290,6 @@
                         }
                     }
                     
-                    // 4. youtu.be/ 共有用形式
                     if (url.includes('youtu.be/')) {
                         const parts = url.split('youtu.be/');
                         if (parts[1]) return parts[1].split('?')[0].split('&')[0];
