@@ -1,0 +1,41 @@
+{
+  "updatedAt": "2026/07/02 13:56:01",
+  "streams": [
+    {
+      "id": 1,
+      "date": "2020/06/20 00:00",
+      "scenario": "Awaken from a nightare!",
+      "system": "DX3",
+      "gm": "茶越きよか",
+      "characters": [
+        {
+          "pcName": "歌衣メイカ",
+          "plName": "",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "赤井銀三",
+          "plName": "",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "ユルミラー・ヴァン・コーサカ",
+          "plName": "コーサカ",
+          "history": "1回のみ",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
+      "url": "https://www.youtube.com/live/CXOTF-J41HI?feature=share,https://www.youtube.com/live/AChv0f2A5OU?feature=share",
+      "hashtag": "ダブルクロスXX",
+      "note": ""
+    }
+  ]
+}
