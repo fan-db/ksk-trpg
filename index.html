@@ -23,7 +23,6 @@
 
     <div x-data="app()" x-init="initApp()" class="max-w-6xl mx-auto px-4 py-6 sm:py-8">
         
-        <!-- ヘッダーエリア -->
         <header class="mb-5 sm:mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-5 border-b border-pink-200">
             <div class="flex items-center gap-3">
                 <span class="text-2xl inline-block transform rotate-[-12deg] select-none text-pink-500">🦇</span>
@@ -31,7 +30,6 @@
                 <span class="text-[10px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full font-bold border border-pink-200 tracking-wide">非公式</span>
             </div>
             
-            <!-- 総数カウンター（リアルタイム連動） -->
             <div class="text-xs text-slate-400 font-medium tracking-tight flex flex-wrap items-center gap-x-4 gap-y-1 sm:justify-end">
                 <div>
                     該当セッション: <span x-text="filteredStreams().length" class="text-pink-600 font-black text-sm"></span> <span class="text-[11px] font-bold text-slate-400">件</span>
@@ -43,11 +41,10 @@
             </div>
         </header>
 
-        <!-- フィルターエリア -->
         <div class="bg-white p-3 sm:p-4 rounded-2xl border border-pink-100 mb-6 space-y-3 shadow-xs">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
-                    <input type="text" x-model="searchQuery" placeholder="🔍 シナリオ、システム、PL、PC名..." class="w-full bg-pink-50/20 border border-pink-150 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all">
+                    <input type="text" x-model="searchQuery" placeholder="🔍 シナリオ、システム、PL、備考の言葉..." class="w-full bg-pink-50/20 border border-pink-150 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all">
                 </div>
 
                 <div class="md:col-span-2 flex flex-col sm:flex-row sm:items-center gap-2">
@@ -58,7 +55,7 @@
                     <span class="text-pink-300 text-xs font-bold text-center hidden sm:inline">〜</span>
                     <div class="flex items-center w-full bg-pink-50/20 border border-pink-150 rounded-xl px-3 py-0.5">
                         <span class="text-[11px] font-bold text-pink-400 mr-2 whitespace-nowrap sm:hidden">終了</span>
-                        <input type="date" x-model="startDate" class="w-full bg-transparent text-sm focus:outline-none py-1 text-slate-600 cursor-pointer">
+                        <input type="date" x-model="endDate" class="w-full bg-transparent text-sm focus:outline-none py-1 text-slate-600 cursor-pointer">
                     </div>
                 </div>
             </div>
@@ -82,11 +79,10 @@
             </div>
         </div>
 
-        <!-- スマホ用カードレイアウト -->
         <div class="block md:hidden space-y-4">
             <template x-for="stream in filteredStreams()" :key="'card-'+stream.id">
-                <div class="bg-white rounded-2xl border border-pink-100 p-4 shadow-xs space-y-3 transition-colors" :class="isWatched(stream.id) ? 'bg-pink-50/10' : ''">
-                    <div class="flex items-center justify-between border-b border-pink-50 pb-2">
+                <div @click="openModal(stream)" class="bg-white rounded-2xl border border-pink-100 p-4 shadow-xs space-y-3 transition-colors cursor-pointer" :class="isWatched(stream.id) ? 'bg-pink-50/10' : ''">
+                    <div class="flex items-center justify-between border-b border-pink-50 pb-2" @click.stop>
                         <span class="text-xs text-slate-400 font-medium" x-text="stream.date"></span>
                         <label class="flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer select-none">
                             <input type="checkbox" :checked="isWatched(stream.id)" @change="toggleWatched(stream.id)" class="w-4 h-4 rounded border-pink-300 text-pink-500 focus:ring-pink-400 cursor-pointer accent-pink-500">
@@ -113,7 +109,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between gap-2 pt-1">
+                    <div class="flex items-center justify-between gap-2 pt-1" @click.stop>
                         <div class="text-[11px] text-slate-500 truncate max-w-[60%]">
                             <span class="font-bold text-slate-400">GM:</span> <span x-text="stream.gm"></span>
                         </div>
@@ -132,9 +128,9 @@
                         <span class="text-slate-400 font-bold mr-1 shrink-0">PL:</span>
                         <div class="flex flex-wrap gap-1 flex-1">
                             <template x-for="char in stream.characters">
-                                <button @click="openModal(char)" class="bg-white text-pink-700 hover:bg-pink-50 text-[10px] font-medium px-1.5 py-0.2 rounded-md cursor-pointer border border-pink-100 transition-colors">
+                                <span class="bg-white text-pink-700 text-[10px] font-medium px-1.5 py-0.2 rounded-md border border-pink-100">
                                     <span x-text="char.plName ? char.plName + '（' + char.pcName + '）' : char.pcName"></span>
-                                </button>
+                                </span>
                             </template>
                         </div>
                     </div>
@@ -142,7 +138,6 @@
             </template>
         </div>
 
-        <!-- PC用テーブルレイアウト -->
         <div class="hidden md:block bg-white rounded-2xl border border-pink-100 overflow-hidden shadow-xs">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[950px]">
@@ -159,8 +154,8 @@
                     </thead>
                     <tbody class="divide-y divide-pink-50 text-sm">
                         <template x-for="stream in filteredStreams()" :key="'table-'+stream.id">
-                            <tr class="hover:bg-pink-50/30 transition-colors" :class="isWatched(stream.id) ? 'bg-pink-50/15' : ''">
-                                <td class="py-4 px-4 text-center">
+                            <tr @click="openModal(stream)" class="hover:bg-pink-50/30 transition-colors cursor-pointer" :class="isWatched(stream.id) ? 'bg-pink-50/15' : ''">
+                                <td class="py-4 px-4 text-center" @click.stop>
                                     <input type="checkbox" :checked="isWatched(stream.id)" @change="toggleWatched(stream.id)" class="w-4 h-4 rounded border-pink-300 text-pink-500 focus:ring-pink-400 cursor-pointer accent-pink-500">
                                 </td>
                                 <td class="py-4 px-4 text-slate-400 font-semibold" x-text="stream.date"></td>
@@ -184,13 +179,13 @@
                                 <td class="py-4 px-4">
                                     <div class="flex flex-wrap gap-1.5">
                                         <template x-for="char in stream.characters">
-                                            <button @click="openModal(char)" class="bg-pink-50/50 text-pink-700 hover:bg-pink-100/60 text-xs font-medium px-2.5 py-1 rounded-xl cursor-pointer border border-pink-100/40 transition-colors">
+                                            <span class="bg-pink-50/50 text-pink-700 text-xs font-medium px-2.5 py-1 rounded-xl border border-pink-100/40">
                                                 <span x-text="char.plName ? char.plName + '（' + char.pcName + '）' : char.pcName"></span>
-                                            </button>
+                                            </span>
                                         </template>
                                     </div>
                                 </td>
-                                <td class="py-4 px-4 text-center">
+                                <td class="py-4 px-4 text-center" @click.stop>
                                     <div class="flex flex-col gap-1.5 max-w-[120px] mx-auto">
                                         <template x-for="link in stream.links">
                                             <a :href="link.url" target="_blank" class="inline-block w-full bg-pink-500 hover:bg-pink-600 text-white text-[11px] py-1 px-2 rounded-lg font-medium transition-colors shadow-xs tracking-wider" x-text="link.label"></a>
@@ -207,40 +202,69 @@
             </div>
         </div>
 
-        <!-- データ読み込み防止 -->
         <template x-if="filteredStreams().length === 0 && updatedAt !== '同期中...'">
             <div class="bg-white rounded-2xl border border-pink-100 p-12 text-center text-slate-400 font-medium shadow-xs">該当する配信データが見つかりません。</div>
         </template>
 
-        <!-- モーダルウインドウ -->
         <div x-show="modalOpen" x-transition class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-xs" @click.self="closeModal()" style="display: none;">
-            <div class="bg-white rounded-2xl shadow-xl border border-pink-100 max-w-md w-full overflow-hidden transform transition-all">
-                <div class="bg-slate-900 px-6 py-4 flex justify-between items-center text-white">
-                    <h3 class="font-bold text-sm tracking-wider" x-text="selectedPc.pcName"></h3>
+            <div class="bg-white rounded-2xl shadow-xl border border-pink-100 max-w-md w-full overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
+                
+                <div class="bg-slate-900 px-6 py-4 flex justify-between items-center text-white shrink-0">
+                    <h3 class="font-bold text-sm tracking-wider" x-text="activeStream.scenario"></h3>
                     <button @click="closeModal()" class="text-white/60 hover:text-white text-2xl font-light transition-colors leading-none">&times;</button>
                 </div>
-                <div class="p-6 space-y-4 text-sm">
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">プレイヤー (PL)</span>
-                        <div class="text-slate-800 font-bold" x-text="selectedPc.plName || '未登録'"></div>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">プロフィール</span>
-                        <div class="text-slate-700 bg-pink-50/20 p-3 rounded-xl whitespace-pre-wrap text-xs border border-pink-50/50 leading-relaxed" x-text="selectedPc.profile || '未登録'"></div>
-                    </div>
-                    <div>
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">継続セッション数 / 履歴</span>
-                        <div class="text-slate-600 text-xs font-medium" x-text="selectedPc.history || '未登録'"></div>
-                    </div>
-                    <template x-if="selectedPc.charasheetUrl">
-                        <div class="pt-1">
-                            <a :href="selectedPc.charasheetUrl" target="_blank" class="text-pink-500 hover:text-pink-600 font-bold text-xs inline-flex items-center gap-1 hover:underline">キャラクターシートを見る ↗</a>
+                
+                <div class="p-6 space-y-4 text-xs sm:text-sm flex-1 overflow-y-auto">
+                    
+                    <template x-if="activeStream.adminNote">
+                        <div class="text-slate-700 bg-pink-50/20 p-3 rounded-xl border border-pink-50/50 leading-relaxed font-normal flex gap-1.5 items-start">
+                            <span class="shrink-0 select-none">💡</span>
+                            <div class="whitespace-pre-wrap" x-text="activeStream.adminNote"></div>
                         </div>
                     </template>
-                    <div class="pt-2 border-t border-pink-50">
-                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">備考</span>
-                        <div class="text-slate-500 text-xs whitespace-pre-wrap leading-relaxed" x-text="selectedPc.note || '-'"></div>
+
+                    <template x-if="activeStream.relatedLinks && activeStream.relatedLinks.length > 0">
+                        <div class="flex flex-wrap gap-1.5 pt-1">
+                            <template x-for="rLink in activeStream.relatedLinks">
+                                <a :href="rLink.url" target="_blank" class="inline-block w-full bg-pink-500 hover:bg-pink-600 text-white text-[10px] py-1 px-2 rounded-lg font-medium transition-colors shadow-xs" x-text="rLink.label"></a>
+                            </template>
+                        </div>
+                    </template>
+
+                    <div class="space-y-3">
+                        <template x-for="char in activeStream.characters">
+                            <template x-if="char.profile || char.history || char.note || char.charasheetUrl">
+                                <div class="bg-white/50 rounded-xl p-3 border border-pink-100/40 space-y-2">
+                                    <div class="flex items-baseline justify-between flex-wrap gap-x-2">
+                                        <div class="font-bold text-slate-800">
+                                            👤 <span x-text="char.pcName"></span>
+                                        </div>
+                                        <div class="text-[11px] text-slate-500">
+                                            PL: <span class="font-bold text-slate-600" x-text="char.plName || '未登録'"></span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-[11px] sm:text-xs space-y-1 text-slate-600 bg-pink-50/10 p-2 rounded-lg border border-pink-50/30">
+                                        <template x-if="char.profile">
+                                            <div><span class="font-bold text-slate-400">プロフィール:</span> <span class="text-slate-700" x-text="char.profile"></span></div>
+                                        </template>
+                                        <template x-if="char.history">
+                                            <div><span class="font-bold text-slate-400">継続セッション数 / 履歴:</span> <span x-text="char.history"></span></div>
+                                        </template>
+                                        <template x-if="char.note">
+                                            <div><span class="font-bold text-slate-400">備考:</span> <span x-text="char.note"></span></div>
+                                        </template>
+                                        <template x-if="char.charasheetUrl">
+                                            <div class="pt-1">
+                                                <a :href="char.charasheetUrl" target="_blank" class="text-pink-500 font-bold hover:underline">キャラクターシートを見る ↗</a>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -260,7 +284,7 @@
                 sortOrder: "desc",
                 watchedIds: [],
                 modalOpen: false,
-                selectedPc: {},
+                activeStream: {},
 
                 async initApp() {
                     const saved = localStorage.getItem('trpg_watched_ids');
@@ -269,6 +293,7 @@
                     }
                     
                     try {
+                        // 👇 【重要】ここのURLをご自身のGitHub Pages用 data.json のURLに書き換えてください！
                         const response = await fetch('https://na-nasika.github.io/ktrpg-fan-db/data.json');
                         if (!response.ok) throw new Error('データが見つかりません');
                         const data = await response.json();
@@ -277,23 +302,19 @@
                         this.updatedAt = data.updatedAt;
                     } catch (error) {
                         console.error("データの読み込みに失敗しました:", error);
-                        this.updatedAt = "同期エラー";
+                        this.updatedAt = "読み込みエラー";
                     }
                 },
 
                 getYoutubeId(links) {
                     if (!links || links.length === 0) return null;
-                    
                     const ytLink = links.find(l => l.url && (l.url.includes('youtube.com') || l.url.includes('youtu.be')));
                     if (!ytLink || !ytLink.url) return null;
-
                     const url = ytLink.url.trim();
-                    
                     if (url.includes('watch?v=')) {
                         const parts = url.split('v=');
                         if (parts[1]) return parts[1].split('&')[0];
                     }
-                    
                     const pathTypes = ['/live/', '/shorts/', '/embed/'];
                     for (const type of pathTypes) {
                         if (url.includes(type)) {
@@ -301,29 +322,19 @@
                             if (parts[1]) return parts[1].split('?')[0].split('&')[0];
                         }
                     }
-                    
                     if (url.includes('youtu.be/')) {
                         const parts = url.split('youtu.be/');
                         if (parts[1]) return parts[1].split('?')[0].split('&')[0];
                     }
-
                     return null;
                 },
 
                 toggleRole(role) {
-                    if (this.kosakaRole === role) {
-                        this.kosakaRole = "all";
-                    } else {
-                        this.kosakaRole = role;
-                    }
+                    this.kosakaRole = this.kosakaRole === role ? "all" : role;
                 },
 
                 toggleStatus(status) {
-                    if (this.selectedStatus === status) {
-                        this.selectedStatus = "all";
-                    } else {
-                        this.selectedStatus = status;
-                    }
+                    this.selectedStatus = this.selectedStatus === status ? "all" : status;
                 },
 
                 toggleSortOrder() {
@@ -337,6 +348,7 @@
                             stream.scenario.toLowerCase().includes(query) ||
                             stream.system.toLowerCase().includes(query) ||
                             stream.gm.toLowerCase().includes(query) ||
+                            (stream.adminNote && stream.adminNote.toLowerCase().includes(query)) ||
                             (stream.hashtag && stream.hashtag.toLowerCase().includes(query)) ||
                             stream.characters.some(c => 
                                 (c.pcName && c.pcName.toLowerCase().includes(query)) || 
@@ -383,14 +395,14 @@
                     localStorage.setItem('trpg_watched_ids', JSON.stringify(this.watchedIds));
                 },
 
-                openModal(charData) {
-                    this.selectedPc = charData;
+                openModal(streamData) {
+                    this.activeStream = streamData;
                     this.modalOpen = true;
                 },
 
                 closeModal() {
                     this.modalOpen = false;
-                    this.selectedPc = {};
+                    this.activeStream = {};
                 }
             }
         }
