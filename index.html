@@ -131,7 +131,7 @@
                         </label>
                     </div>
 
-                    <div class="flex gap-3 items-start">
+                    <div class="flex gap-3 items-center">
                         <template x-if="getYoutubeId(stream.links)">
                             <div class="w-28 shrink-0 aspect-video bg-pink-50 rounded-lg overflow-hidden border border-pink-100/60 shadow-sm">
                                 <img :src="'https://img.youtube.com/vi/' + getYoutubeId(stream.links) + '/mqdefault.jpg'" alt="Thumbnail" class="w-full h-full object-cover">
@@ -149,8 +149,8 @@
                     </div>
 
                     <div class="flex items-center justify-between gap-2 pt-1" @click.stop>
-                        <div class="text-[11px] text-slate-500 truncate max-w-[60%]">
-                            <span class="font-bold text-slate-400">GM:</span> <span x-text="stream.gm"></span>
+                        <div class="text-[11px] text-slate-500 truncate max-w-[60%] flex items-center">
+                            <span class="font-bold text-slate-400 mr-1">GM:</span> <span x-text="stream.gm"></span>
                         </div>
                         <div class="flex flex-col gap-1 w-24 shrink-0 text-center">
                             <template x-for="link in stream.links">
@@ -162,11 +162,11 @@
                         </div>
                     </div>
 
-                    <div class="bg-pink-50/20 rounded-xl p-2.5 text-[11px] border border-pink-50/50 flex flex-wrap gap-1">
+                    <div class="bg-pink-50/20 rounded-xl p-2.5 text-[11px] border border-pink-50/50 flex flex-wrap gap-1 mt-1">
                         <span class="text-slate-400 font-bold mr-1 shrink-0">PL:</span>
-                        <div class="flex flex-wrap gap-1 flex-1">
+                        <div class="flex flex-wrap gap-1 flex-1 items-center">
                             <template x-for="char in stream.characters">
-                                <span class="bg-white text-pink-700 text-[10px] font-medium px-1.5 py-0.5 rounded-md border border-pink-100">
+                                <span class="bg-white text-pink-700 text-[10px] font-medium px-1.5 py-0.5 rounded-md border border-pink-100 flex items-center justify-center">
                                     <span x-text="char.plName ? char.plName + '（' + char.pcName + '）' : char.pcName"></span>
                                 </span>
                             </template>
@@ -253,28 +253,24 @@
             <div class="bg-white rounded-2xl border border-pink-100 p-12 text-center text-slate-400 font-medium shadow-sm">該当する配信データが見つかりません。</div>
         </template>
 
-        <!-- 📸 【新・確定撮影スタジオ】表画面の「スマホ用カードHTML」を100%完全流用して2列にする魔法の枠 -->
+        <!-- 📸 【修正版撮影スタジオ】表のスマホカードの美しさを完璧に2列化する魔法の枠 -->
         <div id="hidden-capture-studio" class="bg-pink-50/60 p-6 rounded-3xl border border-pink-100">
-            <!-- 横幅780pxのスタジオを「2列のグリッド」にし、スマホと全く同じ幅(1列366px)のカードを生成 -->
             <div class="grid grid-cols-2 gap-6 w-full">
                 <template x-for="stream in filteredStreams()" :key="'gallery-'+stream.id">
                     
-                    <!-- 💡 表画面のスマホ用カード(block md:hidden内)のHTML構造・クラスをそのまま100%完全再現！ -->
+                    <!-- 💡 表画面と完全に一致させたスマホカード構造 -->
                     <div class="bg-white rounded-2xl border border-pink-100 p-4 shadow-sm space-y-3 relative w-full text-sm">
                         
-                        <!-- 日付エリア -->
+                        <!-- 日付エリア（お気に入り丸ドットを配置） -->
                         <div class="flex items-center justify-between border-b border-pink-50 pb-2">
                             <div class="flex items-center gap-2">
                                 <div class="w-2.5 h-2.5 rounded-full border bg-pink-100 border-pink-300"></div>
                                 <span class="text-xs text-slate-400 font-medium" x-text="stream.date"></span>
                             </div>
-                            <div class="text-[11px] text-pink-500 font-medium flex items-center gap-1">
-                                <span>♥ FAVORITE</span>
-                            </div>
                         </div>
 
-                        <!-- サムネイル＆シナリオ名エリア -->
-                        <div class="flex gap-3 items-start">
+                        <!-- サムネイル＆シナリオ名エリア（items-centerで真ん中揃え！） -->
+                        <div class="flex gap-3 items-center">
                             <template x-if="getYoutubeId(stream.links)">
                                 <div class="w-28 shrink-0 aspect-video bg-pink-50 rounded-lg overflow-hidden border border-pink-100/60 shadow-sm">
                                     <img :src="'https://img.youtube.com/vi/' + getYoutubeId(stream.links) + '/mqdefault.jpg'" alt="Thumbnail" class="w-full h-full object-cover">
@@ -291,19 +287,19 @@
                             </div>
                         </div>
 
-                        <!-- GMエリア -->
+                        <!-- GMエリア（items-centerで真ん中揃え！） -->
                         <div class="flex items-center justify-between gap-2 pt-1">
-                            <div class="text-[11px] text-slate-500 truncate">
-                                <span class="font-bold text-slate-400">GM:</span> <span class="font-medium text-slate-700" x-text="stream.gm"></span>
+                            <div class="text-[11px] text-slate-500 truncate flex items-center">
+                                <span class="font-bold text-slate-400 mr-1">GM:</span> <span class="font-medium text-slate-700" x-text="stream.gm"></span>
                             </div>
                         </div>
 
-                        <!-- PL/PCエリア -->
-                        <div class="bg-pink-50/20 rounded-xl p-2.5 text-[11px] border border-pink-50/50 flex flex-wrap gap-1">
+                        <!-- PL/PCエリア（mt-2とitems-centerでめり込み防止＆ブロック内文字の真ん中揃え！） -->
+                        <div class="bg-pink-50/20 rounded-xl p-2.5 text-[11px] border border-pink-50/50 flex flex-wrap gap-1 mt-2">
                             <span class="text-slate-400 font-bold mr-1 shrink-0">PL:</span>
-                            <div class="flex flex-wrap gap-1 flex-1">
+                            <div class="flex flex-wrap gap-1 flex-1 items-center">
                                 <template x-for="char in stream.characters">
-                                    <span class="bg-white text-pink-700 text-[10px] font-medium px-1.5 py-0.5 rounded-md border border-pink-100">
+                                    <span class="bg-white text-pink-700 text-[10px] font-medium px-1.5 py-0.5 rounded-md border border-pink-100 flex items-center justify-center">
                                         <span x-text="char.plName ? char.plName + '（' + char.pcName + '）' : char.pcName"></span>
                                     </span>
                                 </template>
@@ -592,7 +588,7 @@
                             backgroundColor: '#fff5f5', 
                             scale: 2, 
                             logging: false,
-                            letterRendering: false, // フォント本来の美しさをそのまま活かすためfalseに戻します
+                            letterRendering: false,
                             onclone: (clonedDoc) => {
                                 const targetStudio = clonedDoc.getElementById('hidden-capture-studio');
                                 if (targetStudio) {
