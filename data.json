@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026/07/03 20:53",
+  "updatedAt": "2026/07/03 23:03",
   "streams": [
     {
       "id": "stream_1",
@@ -11541,7 +11541,7 @@
       "date": "2025/12/23",
       "scenario": "ガシャン！",
       "system": "CoC7版",
-      "gm": "七峰きざし（７兆倍）",
+      "gm": "7兆倍",
       "characters": [
         {
           "pcName": "漣三波瑠",
@@ -11694,7 +11694,40 @@
       "scenario": "スイサイダルアクト",
       "system": "CoC6版",
       "gm": "三上",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "青翔/田中実",
+          "plName": "健屋花那",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "弐土倉紫門/四季王寺紫門",
+          "plName": "コーサカ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "津久井渓/財千夜子",
+          "plName": "周央サンゴ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "黒見ヒカル/来栖ヒロ",
+          "plName": "影山シエン",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "1",
@@ -11715,7 +11748,24 @@
       "scenario": "ニトロとレモン",
       "system": "CoC6版",
       "gm": "つきのわむく",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "キトロン",
+          "plName": "コーサカ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "芹沢枸櫞",
+          "plName": "neon",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "前編",
@@ -11736,7 +11786,24 @@
       "scenario": "翠嵐シンフォニア",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "星乃結花",
+          "plName": "日ノ森あんず",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "幕田-弐",
+          "plName": "しまどりる",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
@@ -11779,7 +11846,24 @@
       "scenario": "マーダースパイラル",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "沢渡瑛",
+          "plName": "ひげさん",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "佐倉奏",
+          "plName": "ALTO",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
@@ -11822,7 +11906,24 @@
       "scenario": "マーダースパイラル",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "由良怯懦/フェイルセーフ",
+          "plName": "長月達平",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "維御典咲真",
+          "plName": "矢野俊策",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
@@ -11837,9 +11938,42 @@
       "id": "stream_307",
       "date": "2026/02/12",
       "scenario": "この命が燃え尽き果てるまで",
-      "system": "",
+      "system": "CoC6版",
       "gm": "ひげさん",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "桜",
+          "plName": "コーサカ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "ビアー",
+          "plName": "Ci",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "八坂薫子",
+          "plName": "結崎有理",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "榊季陽雅",
+          "plName": "からすば晴",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
@@ -11856,7 +11990,24 @@
       "scenario": "マーダースパイラル",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "某",
+          "plName": "つきのわむく",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "神",
+          "plName": "藍川蓮",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
@@ -11873,7 +12024,24 @@
       "scenario": "夕星シンフォニア",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "黒雲小鳥",
+          "plName": "neon",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "夕霧司",
+          "plName": "雪城眞尋",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "前編",
@@ -11992,7 +12160,40 @@
       "scenario": "ウルトラヒロイック2",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "コポルターダ=ポポッカ",
+          "plName": "保谷伸",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "オーウィル",
+          "plName": "戯嶋サチ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "スヴェン・エルバ",
+          "plName": "もんとろ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "ジン",
+          "plName": "三上",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
@@ -12009,7 +12210,32 @@
       "scenario": "私のエトワール",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "硝子坂心愛",
+          "plName": "ひとなつおもい",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "柏餅晶子",
+          "plName": "文町",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "七井アダム",
+          "plName": "7兆倍",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
@@ -12064,7 +12290,24 @@
       "scenario": "マーダースパイラル",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "マリア",
+          "plName": "眠来",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "片桐真人",
+          "plName": "藤乃美空",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
@@ -12141,7 +12384,40 @@
       "scenario": "Jewel",
       "system": "エモクロア",
       "gm": "辛咲こまど",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "ミラ・バレンヌ",
+          "plName": "甘乃あもこ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "アンフィス",
+          "plName": "高音超子",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "オズワルド・ナイトフォール",
+          "plName": "もこ田めめめ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "ヴァルカルディナ・ルクレッツァ",
+          "plName": "コーサカ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "導入",
@@ -12166,7 +12442,40 @@
       "scenario": "ウルトラヒロイック",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "レニー",
+          "plName": "作楽つきひ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "クライン",
+          "plName": "未確認動物うまぴ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "ナオ",
+          "plName": "茶越きよか",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "アルセリオ・ノクティス",
+          "plName": "歌衣イツミ",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
@@ -12183,7 +12492,24 @@
       "scenario": "マーダースパイラル",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "霧衛",
+          "plName": "ざったん",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "礼亞",
+          "plName": "えも",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
@@ -12200,7 +12526,24 @@
       "scenario": "夕星シンフォニア",
       "system": "エモクロア",
       "gm": "コーサカ",
-      "characters": [],
+      "characters": [
+        {
+          "pcName": "金烏天",
+          "plName": "藍生あおい",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        },
+        {
+          "pcName": "明星婁々那",
+          "plName": "想有ぱか",
+          "history": "",
+          "profile": "",
+          "charasheetUrl": "",
+          "note": ""
+        }
+      ],
       "links": [
         {
           "label": "YouTube",
