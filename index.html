@@ -20,7 +20,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #ec4899; }
         [x-cloak] { display: none !important; }
         
-        /* 📸 html2canvas用の撮影スタジオ専用バグ防止スタイル */
+        /* 📸 html2canvas用の撮影スタジオ専用スタイル */
         #hidden-capture-studio {
             position: absolute;
             top: -9999px;
@@ -28,7 +28,6 @@
             width: 780px; /* スマホサイズ(366px)×2列＋余白(48px)で完全固定 */
             box-sizing: border-box;
         }
-        /* スタジオ内はフォントや文字のレンダリング補正を表画面と100%統一 */
         #hidden-capture-studio * {
             font-family: 'M PLUS 1p', 'Noto Sans JP', sans-serif !important;
             box-sizing: border-box;
@@ -90,7 +89,6 @@
                         <button @click="toggleStatus('unwatched')" :class="selectedStatus === 'unwatched' ? 'bg-pink-500 text-white font-bold shadow-sm' : 'text-slate-600 hover:bg-pink-100/50'" class="px-3 py-1 rounded-lg transition-all cursor-pointer">⬜ 未視聴</button>
                     </div>
 
-                    <!-- お気に入り絞り込みボタン -->
                     <button @click="toggleFavoriteFilter()" :class="showFavoritesOnly ? 'bg-pink-500 text-white font-bold border-pink-500 shadow-sm' : 'border-pink-200 text-slate-600 hover:bg-pink-50/50'" class="border px-3 py-1 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer">
                         <span class="w-2 h-2 rounded-full transition-colors" :class="showFavoritesOnly ? 'bg-white' : 'bg-pink-300'"></span>
                         <span>お気に入り</span>
@@ -98,7 +96,6 @@
                 </div>
 
                 <div class="flex items-center gap-2 ml-auto sm:ml-0">
-                    <!-- 画像保存ボタン（お気に入り絞り込み中のみ自動出現） -->
                     <template x-if="showFavoritesOnly && filteredStreams().length > 0">
                         <button @click="downloadAsImage()" class="bg-slate-800 hover:bg-slate-700 text-white font-medium px-3 py-1 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
                             <span>📸 画像で保存</span>
@@ -253,24 +250,24 @@
             <div class="bg-white rounded-2xl border border-pink-100 p-12 text-center text-slate-400 font-medium shadow-sm">該当する配信データが見つかりません。</div>
         </template>
 
-        <!-- 📸 【修正版撮影スタジオ】表のスマホカードの美しさを完璧に2列化する魔法の枠 -->
+        <!-- 📸 【完全修正版撮影スタジオ】美しさを100%保証する2列ギャラリー枠 -->
         <div id="hidden-capture-studio" class="bg-pink-50/60 p-6 rounded-3xl border border-pink-100">
             <div class="grid grid-cols-2 gap-6 w-full">
                 <template x-for="stream in filteredStreams()" :key="'gallery-'+stream.id">
                     
-                    <!-- 💡 表画面と完全に一致させたスマホカード構造 -->
-                    <div class="bg-white rounded-2xl border border-pink-100 p-4 shadow-sm space-y-3 relative w-full text-sm">
+                    <!-- 💡 完全固定のスマホカード構造 -->
+                    <div class="bg-white rounded-2xl border border-pink-100 p-4 shadow-sm flex flex-col justify-between relative w-full text-sm min-h-[190px]">
                         
-                        <!-- 日付エリア（お気に入り丸ドットを配置） -->
-                        <div class="flex items-center justify-between border-b border-pink-50 pb-2">
+                        <!-- 上部：ヘッダー -->
+                        <div class="flex items-center justify-between border-b border-pink-50 pb-2 mb-3 shrink-0">
                             <div class="flex items-center gap-2">
                                 <div class="w-2.5 h-2.5 rounded-full border bg-pink-100 border-pink-300"></div>
                                 <span class="text-xs text-slate-400 font-medium" x-text="stream.date"></span>
                             </div>
                         </div>
 
-                        <!-- サムネイル＆シナリオ名エリア（items-centerで真ん中揃え！） -->
-                        <div class="flex gap-3 items-center">
+                        <!-- 中央部：サムネイル ＆ シナリオテキスト（flex items-centerで完全に縦中央揃えに） -->
+                        <div class="flex gap-3 items-center flex-1 my-1">
                             <template x-if="getYoutubeId(stream.links)">
                                 <div class="w-28 shrink-0 aspect-video bg-pink-50 rounded-lg overflow-hidden border border-pink-100/60 shadow-sm">
                                     <img :src="'https://img.youtube.com/vi/' + getYoutubeId(stream.links) + '/mqdefault.jpg'" alt="Thumbnail" class="w-full h-full object-cover">
@@ -281,25 +278,28 @@
                                     <span class="text-[10px] text-pink-300 font-bold">NO IMAGE</span>
                                 </div>
                             </template>
-                            <div class="space-y-1 flex-1 min-w-0">
+                            <div class="flex flex-col justify-center flex-1 min-w-0">
                                 <div class="font-bold text-slate-900 tracking-wide text-xs sm:text-sm leading-snug break-words" x-text="stream.scenario"></div>
-                                <span class="inline-block bg-slate-100 text-slate-500 text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-md font-medium" x-text="stream.system"></span>
+                                <div class="mt-1">
+                                    <span class="inline-block bg-slate-100 text-slate-500 text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-md font-medium" x-text="stream.system"></span>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- GMエリア（items-centerで真ん中揃え！） -->
-                        <div class="flex items-center justify-between gap-2 pt-1">
-                            <div class="text-[11px] text-slate-500 truncate flex items-center">
-                                <span class="font-bold text-slate-400 mr-1">GM:</span> <span class="font-medium text-slate-700" x-text="stream.gm"></span>
+                        <!-- 下部：GM情報（上下にしっかりピクセル余白を取り、絶対につぶれない防護壁を設置） -->
+                        <div class="py-1.5 my-1 shrink-0 flex items-center">
+                            <div class="text-[11px] text-slate-500 truncate flex items-center leading-normal">
+                                <span class="font-bold text-slate-400 mr-1">GM:</span> 
+                                <span class="font-bold text-slate-700" x-text="stream.gm"></span>
                             </div>
                         </div>
 
-                        <!-- PL/PCエリア（mt-2とitems-centerでめり込み防止＆ブロック内文字の真ん中揃え！） -->
-                        <div class="bg-pink-50/20 rounded-xl p-2.5 text-[11px] border border-pink-50/50 flex flex-wrap gap-1 mt-2">
+                        <!-- 最下部：PL/PCエリア（各ブロック内にflex items-centerを入れて中の文字も完全中央揃え） -->
+                        <div class="bg-pink-50/20 rounded-xl p-2.5 text-[11px] border border-pink-50/50 flex flex-wrap gap-1 mt-2 shrink-0 items-center">
                             <span class="text-slate-400 font-bold mr-1 shrink-0">PL:</span>
                             <div class="flex flex-wrap gap-1 flex-1 items-center">
                                 <template x-for="char in stream.characters">
-                                    <span class="bg-white text-pink-700 text-[10px] font-medium px-1.5 py-0.5 rounded-md border border-pink-100 flex items-center justify-center">
+                                    <span class="bg-white text-pink-700 text-[10px] font-medium px-2 py-0.5 min-h-[22px] rounded-md border border-pink-100 flex items-center justify-center leading-none">
                                         <span x-text="char.plName ? char.plName + '（' + char.pcName + '）' : char.pcName"></span>
                                     </span>
                                 </template>
@@ -314,16 +314,12 @@
         <!-- ✨ 統合モーダルウインドウ -->
         <div x-show="modalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40" @click.self="closeModal()" style="display: none;">
             <div class="bg-white rounded-2xl shadow-xl border border-pink-100 max-w-md w-full overflow-hidden flex flex-col max-h-[85vh] relative z-50">
-                
-                <!-- モーダルヘッダー -->
                 <div class="bg-slate-900 px-6 py-4 flex justify-between items-center text-white shrink-0">
                     <h3 class="font-bold text-sm tracking-wider truncate mr-4" x-text="activeStream.scenario"></h3>
                     <button @click="closeModal()" class="text-white/60 hover:text-white text-2xl font-light transition-colors leading-none cursor-pointer">&times;</button>
                 </div>
                 
-                <!-- モーダルボディ -->
                 <div class="p-6 space-y-4 text-xs sm:text-sm flex-1 overflow-y-auto bg-white">
-                    
                     <template x-if="activeStream.adminNote">
                         <div class="text-slate-700 bg-pink-50/30 p-3 rounded-xl border border-pink-100/80 leading-relaxed font-normal flex gap-1.5 items-start">
                             <span class="shrink-0 select-none">💡</span>
@@ -339,7 +335,6 @@
                         </div>
                     </template>
 
-                    <!-- プレイヤー & キャラクター詳細 -->
                     <div class="space-y-4">
                         <template x-for="char in activeStream.characters">
                             <template x-if="char.profile || char.history || char.note || char.charasheetUrl">
@@ -577,7 +572,6 @@
                     localStorage.setItem('trpg_fav_ids', JSON.stringify(this.favoriteIds));
                 },
 
-                // 📸 スマホのカード見た目のまま、完全に美しく保存する撮影処理
                 async downloadAsImage() {
                     const studio = document.getElementById('hidden-capture-studio');
                     if (!studio) return;
