@@ -20,12 +20,12 @@
         ::-webkit-scrollbar-thumb:hover { background: #ec4899; }
         [x-cloak] { display: none !important; }
         
-        /* 📸 【完全解決】html2canvas専用：絶対に潰れず・ズレない二列スタジオ */
+        /* 📸 html2canvas専用：二列スタジオ */
         #dynamic-capture-studio {
             position: absolute;
             top: -9999px;
             left: -9999px;
-            width: 780px; /* 幅を完全固定 */
+            width: 780px; 
             box-sizing: border-box;
             background-color: #fff5f5;
             padding: 24px;
@@ -33,18 +33,17 @@
         }
         .studio-grid {
             display: grid;
-            grid-template-columns: 354px 354px; /* html2canvasの自動計算バグを防ぐ完全固定幅 */
+            grid-template-columns: 354px 354px; 
             gap: 24px;
             width: 100%;
         }
         .studio-grid .capture-hide {
-            display: none !important; /* 撮影時はボタンやチェックボックスを完全に消去 */
+            display: none !important; 
         }
-        /* html2canvasが100%上下ど真ん中と認識する古典的テーブルセル配置 */
         .studio-middle-cell {
             display: table-cell !important;
             vertical-align: middle !important;
-            height: 64px; /* サムネイル(aspect-video)の高さと同期させて縦軸の基盤を作る */
+            height: 64px; 
         }
     </style>
 </head>
@@ -169,7 +168,7 @@
                                 <a :href="link.url" target="_blank" class="inline-block w-full bg-pink-500 hover:bg-pink-600 text-white text-[10px] py-1 px-1.5 rounded-lg font-medium transition-colors shadow-sm" x-text="link.label"></a>
                             </template>
                             <template x-if="stream.hashtag">
-                                <a :href="'https://x.com/search?q=' + encodeURIComponent(stream.hashtag)" target="_blank" class="inline-block w-full bg-slate-700 hover:bg-slate-600 text-white text-[9px] py-0.5 px-1.5 rounded-lg font-normal transition-colors overflow-hidden text-ellipsis whitespace-nowrap" x-text="stream.hashtag"></a>
+                                <a :href="'https://x.com/search?q=' + encodeURIComponent('#' + stream.hashtag)" target="_blank" class="inline-block w-full bg-slate-700 hover:bg-slate-600 text-white text-[9px] py-0.5 px-1.5 rounded-lg font-normal transition-colors overflow-hidden text-ellipsis whitespace-nowrap" x-text="stream.hashtag"></a>
                             </template>
                         </div>
                     </div>
@@ -248,7 +247,7 @@
                                             <a :href="link.url" target="_blank" class="inline-block w-full bg-pink-500 hover:bg-pink-600 text-white text-[11px] py-1 px-2 rounded-lg font-medium transition-colors shadow-sm tracking-wider" x-text="link.label"></a>
                                         </template>
                                         <template x-if="stream.hashtag">
-                                            <a :href="'https://x.com/search?q=' + encodeURIComponent(stream.hashtag)" target="_blank" class="inline-block w-full bg-slate-700 hover:bg-slate-600 text-white text-[10px] py-0.5 px-2 rounded-lg font-normal transition-colors overflow-hidden text-ellipsis whitespace-nowrap" x-text="stream.hashtag"></a>
+                                            <a :href="'https://x.com/search?q=' + encodeURIComponent('#' + stream.hashtag)" target="_blank" class="inline-block w-full bg-slate-700 hover:bg-slate-600 text-white text-[10px] py-0.5 px-2 rounded-lg font-normal transition-colors overflow-hidden text-ellipsis whitespace-nowrap" x-text="stream.hashtag"></a>
                                         </template>
                                     </div>
                                 </td>
@@ -525,7 +524,6 @@
                     localStorage.setItem('trpg_fav_ids', JSON.stringify(this.favoriteIds));
                 },
 
-                // 📸 【超安全化】PCでもスマホでも、その場でデータをHTML化してクローンを送り込む
                 async downloadAsImage() {
                     const studio = document.getElementById('dynamic-capture-studio');
                     if (!studio) return;
@@ -535,7 +533,6 @@
                     const gridWrapper = document.createElement('div');
                     gridWrapper.className = 'studio-grid';
                     
-                    // 🛠️ 劇的修正：現在のDOMから引っ張るのをやめ、Alpineのフィルター済み配列から直にHTMLを新造する
                     const currentFavStreams = this.filteredStreams();
                     if (currentFavStreams.length === 0) {
                         alert("保存するデータがありません。");
@@ -543,14 +540,12 @@
                     }
 
                     currentFavStreams.forEach(stream => {
-                        // 撮影専用の「絶対に崩れない物理構造カード」を組み立て
                         const card = document.createElement('div');
                         card.className = "bg-white rounded-2xl border border-pink-100 p-4 shadow-sm space-y-3 relative";
                         card.style.width = '354px';
                         card.style.maxWidth = '354px';
                         card.style.display = 'block';
 
-                        // 1. ヘッダー
                         const header = document.createElement('div');
                         header.className = "flex items-center justify-between border-b border-pink-50 pb-2";
                         
@@ -561,7 +556,6 @@
                         header.appendChild(leftGroup);
                         card.appendChild(header);
 
-                        // 2. 中央（サムネイル ＆ タイトル）
                         const centerSection = document.createElement('div');
                         centerSection.className = "flex gap-3 items-center";
                         
@@ -572,7 +566,6 @@
                         
                         centerSection.innerHTML = thumbHtml;
 
-                        // 🛠️ html2canvas用テーブルセル中央揃え
                         const textCell = document.createElement('div');
                         textCell.className = "studio-middle-cell flex-1 min-w-0";
                         textCell.style.display = 'table-cell';
@@ -584,7 +577,6 @@
                         centerSection.appendChild(textCell);
                         card.appendChild(centerSection);
 
-                        // 3. GM
                         const gmSection = document.createElement('div');
                         gmSection.className = "flex items-center justify-between gap-2 pt-1";
                         gmSection.innerHTML = `
@@ -595,7 +587,6 @@
                         `;
                         card.appendChild(gmSection);
 
-                        // 4. PL
                         const plSection = document.createElement('div');
                         plSection.className = "bg-pink-50/20 rounded-xl p-2.5 text-[11px] border border-pink-50/50 flex flex-wrap gap-1 mt-1 items-center";
                         
@@ -613,7 +604,6 @@
                     
                     studio.appendChild(gridWrapper);
                     
-                    // 撮影実行
                     try {
                         const canvas = await html2canvas(studio, {
                             useCORS: true, 
@@ -638,7 +628,7 @@
                         console.error("画像の生成に失敗しました:", error);
                         alert("画像の保存中にエラーが発生しました。");
                     } finally {
-                        studio.innerHTML = ''; // スタジオの掃除
+                        studio.innerHTML = ''; 
                     }
                 },
 
