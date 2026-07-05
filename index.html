@@ -45,6 +45,16 @@
             vertical-align: middle !important;
             height: 64px; 
         }
+        
+        /* 💫 スクロール移動したターゲットをピカッと強調するエフェクト */
+        .highlight-target {
+            animation: pulse-highlight 1.5s ease-in-out;
+        }
+        @keyframes pulse-highlight {
+            0% { background-color: rgba(244, 114, 182, 0); }
+            30% { background-color: rgba(244, 114, 182, 0.3); transform: scale(1.02); }
+            100% { background-color: rgba(244, 114, 182, 0); }
+        }
     </style>
 </head>
 <body class="bg-pink-50/40 text-slate-800 antialiased selection:bg-pink-100 selection:text-pink-900">
@@ -122,7 +132,7 @@
 
         <div id="mobile-card-container" class="block md:hidden space-y-4">
             <template x-for="stream in filteredStreams()" :key="'card-'+stream.id">
-                <div @click="openModal(stream)" class="bg-white rounded-2xl border border-pink-100 p-4 shadow-sm space-y-3 transition-colors cursor-pointer relative" :class="isWatched(stream.id) ? 'bg-pink-50/10' : ''">
+                <div :id="'mobile-'+stream.id" @click="openModal(stream)" class="bg-white rounded-2xl border border-pink-100 p-4 shadow-sm space-y-3 transition-all duration-300 cursor-pointer relative" :class="isWatched(stream.id) ? 'bg-pink-50/10' : ''">
                     
                     <div class="flex items-center justify-between border-b border-pink-50 pb-2">
                         <div class="flex items-center gap-2">
@@ -204,7 +214,7 @@
                     </thead>
                     <tbody class="divide-y divide-pink-50 text-sm">
                         <template x-for="stream in filteredStreams()" :key="'table-'+stream.id">
-                            <tr @click="openModal(stream)" class="hover:bg-pink-50/30 transition-colors cursor-pointer" :class="isWatched(stream.id) ? 'bg-pink-50/15' : ''">
+                            <tr :id="'pc-'+stream.id" @click="openModal(stream)" class="hover:bg-pink-50/30 transition-all duration-300 cursor-pointer" :class="isWatched(stream.id) ? 'bg-pink-50/15' : ''">
                                 <td class="py-4 px-4 text-center" @click.stop>
                                     <button @click="toggleFavorite(stream.id)" class="p-1 focus:outline-none cursor-pointer" title="お気に入り">
                                         <div class="w-2.5 h-2.5 rounded-full border mx-auto transition-all duration-200" 
@@ -334,22 +344,18 @@
                                         </template>
 
                                         <template x-if="char.note">
-                                            <div>
-                                                <div class="font-bold text-slate-400 text-[10px] uppercase tracking-wider mb-0.5">メモ</div>
-                                                <div class="text-slate-700 bg-slate-50/50 p-3 rounded-xl border border-slate-100/60 whitespace-pre-wrap text-xs sm:text-sm">
-                                                    <span x-text="char.note.replace(/#\S+/g, '').trim()"></span>
-                                                    
-                                                    <template x-if="char.note.includes('#')">
-                                                        <div class="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap gap-1.5 items-center">
-                                                            <span class="text-[10px] font-bold text-slate-400 mr-1 select-none">TAG:</span>
-                                                            <template x-for="tag in extractTags(char.note)">
-                                                                <button @click="searchByTag(tag)" class="bg-pink-50 hover:bg-pink-100 text-pink-700 font-bold px-2 py-0.5 rounded-md border border-pink-200/40 transition-colors text-[10px] sm:text-xs cursor-pointer">
-                                                                    <span x-text="'#' + tag"></span>
-                                                                </button>
-                                                            </template>
-                                                        </div>
-                                                    </template>
-                                                </div>
+                                            <div class="space-y-1.5">
+                                                <div class="text-slate-700 leading-relaxed whitespace-pre-wrap text-xs sm:text-sm" x-text="char.note.replace(/#\S+/g, '').trim()"></div>
+                                                
+                                                <template x-if="char.note.includes('#')">
+                                                    <div class="pt-1 flex flex-wrap gap-1.5 items-center">
+                                                        <template x-for="tag in extractTags(char.note)">
+                                                            <button @click="searchByTag(tag)" class="bg-pink-50 hover:bg-pink-100 text-pink-700 font-bold px-2 py-0.5 rounded-md border border-pink-200/40 transition-colors text-[10px] sm:text-xs cursor-pointer">
+                                                                <span x-text="'#' + tag"></span>
+                                                            </button>
+                                                        </template>
+                                                    </div>
+                                                </template>
                                             </div>
                                         </template>
 
@@ -444,7 +450,7 @@
                     return items;
                 },
 
-                // 🛠️【追加完了】文章内の[リンク]や@IDを解析して、控えめな文字リンクに変換
+                // 🛠️【指定部分のみ修正】@ID自体の表記を消し、純粋なタイトルだけの文字リンクにパース
                 renderAdminNote(text) {
                     if (!text) return '';
                     
@@ -455,39 +461,61 @@
                         .replace(/"/g, '&quot;')
                         .replace(/'/g, '&#039;');
 
+                    // Markdown風リンク
                     safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/.*?)\)/g, (match, label, url) => {
                         return `<a href="${url}" target="_blank" class="text-pink-500 font-bold hover:underline inline-flex items-center gap-0.5">${label}<span class="text-[10px] font-normal text-pink-400">↗</span></a>`;
                     });
 
+                    // @IDリンク（@IDの文字自体は消去し、シナリオ名だけの美しいリンクに変換）
                     safeText = safeText.replace(/@(\d+)/g, (match, id) => {
                         const targetId = 'stream_' + id;
                         const found = this.streams.find(s => s.id === targetId);
-                        const titleText = found ? `（${found.scenario}）` : '';
-                        return `<span data-jump-id="${targetId}" class="text-pink-500 font-bold underline cursor-pointer hover:text-pink-700 select-none">@${id}${titleText}</span>`;
+                        const titleText = found ? found.scenario : `@${id}`;
+                        return `<span data-jump-id="${targetId}" class="text-pink-500 font-bold underline cursor-pointer hover:text-pink-700 select-none">${titleText}<span class="text-[10px] font-normal text-pink-400 ml-0.5">↗</span></span>`;
                     });
 
                     return safeText;
                 },
 
+                // 🛠️【指定部分のみ修正】@IDクリック時、モーダルを閉じて該当カード位置へスクロール＆ピカッと光らせる
                 handleInlineClick(event) {
                     const jumpId = event.target.getAttribute('data-jump-id');
                     if (jumpId) {
-                        const foundStream = this.streams.find(s => s.id === jumpId);
-                        if (foundStream) {
-                            this.activeStream = foundStream;
-                        } else {
-                            alert('該当するセッションデータが見つかりませんでした。IDを確認してください。');
-                        }
+                        // 1. まずはモーダルを閉じる
+                        this.closeModal();
+
+                        // 2. スマホ（mobile-）とPC（pc-）両方の要素ID候補を準備
+                        setTimeout(() => {
+                            const isMobile = window.innerWidth < 768;
+                            const elementId = (isMobile ? 'mobile-' : 'pc-') + jumpId;
+                            const targetElement = document.getElementById(elementId);
+
+                            if (targetElement) {
+                                // 3. 該当のカード位置までスムーズにスクロール移動
+                                targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                
+                                // 4. スクロール後にピカッと光らせて視線誘導（1.5秒後に自動消去）
+                                targetElement.classList.add('highlight-target');
+                                setTimeout(() => {
+                                    targetElement.classList.remove('highlight-target');
+                                }, 1500);
+                            } else {
+                                alert('該当するセッションが現在の一覧に見つかりませんでした。フィルター（GM/PL絞り込み等）を解除して再度お試しください。');
+                            }
+                        }, 150); // モーダルが閉じるのを一瞬待つバグ防止タイマー
                     }
                 },
 
+                // 🛠️【指定部分のみ修正】全角スペースや改行、タブなど、あらゆる空白文字に対応した堅牢なハッシュタグ抽出
                 extractTags(text) {
                     if (!text) return [];
-                    const matches = text.match(/#(\S+)/g);
+                    // #[^\s#]+ の形式で、空白（全角含む）または次の#が来るまでを1つのタグとして正確にキャッチ
+                    const matches = text.match(/#[^\s#]+/g);
                     if (!matches) return [];
-                    return matches.map(t => t.substring(1));
+                    return matches.map(t => t.substring(1).trim()).filter(t => t.length > 0);
                 },
 
+                // 🛠️【指定部分のみ修正】ハッシュタグクリック時、検索を走らせてモーダルを閉じトップへ戻す
                 searchByTag(tagName) {
                     this.searchQuery = tagName;
                     this.closeModal();
