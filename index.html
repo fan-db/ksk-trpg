@@ -294,65 +294,60 @@
 
                     <div class="space-y-4">
                         <template x-for="char in activeStream.characters">
-                            <template x-if="char.profile || char.history || char.note || char.charasheetUrl">
-                                <div class="bg-white rounded-xl p-4 border border-pink-100 space-y-3 shadow-2xs">
-                                    <div class="flex items-baseline justify-between flex-wrap gap-x-2 border-b border-pink-50 pb-1.5">
-                                        <div class="font-bold text-slate-800 text-sm sm:text-base">
-                                            👤 <span x-text="char.pcName"></span>
-                                        </div>
-                                        <div class="text-[11px] text-slate-500">
-                                            PL: <span class="font-bold text-slate-600" x-text="char.plName || '未登録'"></span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="text-[11px] sm:text-xs space-y-3 text-slate-600">
-                                        <template x-if="char.profile">
-                                            <div>
-                                                <div class="font-bold text-slate-400 text-[10px] uppercase tracking-wider mb-0.5">プロフィール</div>
-                                                <div class="text-slate-700 bg-slate-50/50 p-2 rounded-lg border border-slate-100/60" x-text="char.profile"></div>
-                                            </div>
-                                        </template>
-
-                                        <template x-if="char.history">
-                                            <div>
-                                                <div class="font-bold text-slate-400 text-[10px] uppercase tracking-wider mb-1">通過済みシナリオ</div>
-                                                <div class="grid grid-cols-1 gap-1.5">
-                                                    <template x-for="line in parseHistoryLinks(char.history)">
-                                                        <div>
-                                                            <template x-if="line.url">
-                                                                <a :href="line.url" target="_blank" class="flex items-center justify-between w-full bg-pink-50/30 hover:bg-pink-100/40 text-pink-700 font-bold px-3 py-2 rounded-xl border border-pink-200/40 transition-colors text-left text-xs">
-                                                                    <span x-text="line.title"></span>
-                                                                    <span class="text-[10px] font-normal text-pink-400">↗</span>
-                                                                </a>
-                                                            </template>
-                                                            
-                                                            <template x-if="!line.url">
-                                                                <div class="text-slate-600 bg-slate-50/80 px-3 py-2 rounded-xl border border-slate-100/70 font-medium text-xs" x-text="line.title"></div>
-                                                            </template>
-                                                        </div>
-                                                    </template>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <template x-if="char.note">
-    <div class="text-slate-700 leading-relaxed whitespace-pre-wrap text-xs sm:text-sm pt-1" 
-         x-html="renderCharNote(char.note)">
-    </div>
-</template>
-
-                                        <template x-if="char.charasheetUrl">
-                                            <div class="pt-1">
-                                                <a :href="char.charasheetUrl" target="_blank" class="inline-flex items-center gap-1 text-pink-500 font-bold hover:underline">
-                                                    <span>キャラクターシートを見る</span>
-                                                    <span class="text-[10px]">↗</span>
-                                                </a>
-                                            </div>
-                                        </template>
-                                    </div>
+    <template x-if="char.history || char.note || char.charasheetUrl">
+        <div class="bg-white rounded-xl p-4 border border-pink-100 space-y-3 shadow-2xs">
+            
+            <div class="flex items-baseline justify-between flex-wrap gap-x-2 border-b border-pink-50 pb-1.5">
+                <div class="font-bold text-slate-800 text-sm sm:text-base">
+                    👤 <span x-text="char.pcName"></span>
+                </div>
+                <div class="text-[11px] text-slate-500">
+                    PL: <span class="font-bold text-slate-600" x-text="char.plName || '未登録'"></span>
+                </div>
+            </div>
+            
+            <div class="text-[11px] sm:text-xs space-y-3 text-slate-600">
+                
+                <template x-if="char.history">
+                    <div>
+                        <div class="font-bold text-slate-400 text-[10px] uppercase tracking-wider mb-1">通過済みシナリオ</div>
+                        <div class="grid grid-cols-1 gap-1.5">
+                            <template x-for="line in parseHistoryLinks(char.history)">
+                                <div>
+                                    <template x-if="line.url">
+                                        <a :href="line.url" target="_blank" class="flex items-center justify-between w-full bg-pink-50/30 hover:bg-pink-100/40 text-pink-700 font-bold px-3 py-2 rounded-xl border border-pink-200/40 transition-colors text-left text-xs">
+                                            <span x-text="line.title"></span>
+                                            <span class="text-[10px] font-normal text-pink-400">↗</span>
+                                        </a>
+                                    </template>
+                                    <template x-if="!line.url">
+                                        <div class="text-slate-600 bg-slate-50/80 px-3 py-2 rounded-xl border border-slate-100/70 font-medium text-xs" x-text="line.title"></div>
+                                    </template>
                                 </div>
                             </template>
-                        </template>
+                        </div>
+                    </div>
+                </template>
+
+                <template x-if="char.note">
+                    <div class="text-slate-700 leading-relaxed whitespace-pre-wrap text-xs sm:text-sm pt-1" 
+                         x-html="renderCharNote(char.note)">
+                    </div>
+                </template>
+
+                <template x-if="char.charasheetUrl">
+                    <div class="pt-1">
+                        <a :href="char.charasheetUrl" target="_blank" class="inline-flex items-center gap-1 text-pink-500 font-bold hover:underline">
+                            <span>キャラクターシートを見る</span>
+                            <span class="text-[10px]">↗</span>
+                        </a>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+    </template>
+</template>
                     </div>
 
                 </div>
@@ -432,7 +427,6 @@
                     return items;
                 },
 
-                // 🛠️【バグ修正】セッション詳細：余計なボタン化の干渉をすべて排除し、純粋な文章＋文字リンクにする
 renderAdminNote(text) {
     if (!text) return '';
     
@@ -441,12 +435,10 @@ renderAdminNote(text) {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 
-    // [テキスト](URL) を文章の流れを壊さないピンクの文字リンク（インライン）に変換
-    safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/.*?)\)/g, (match, label, url) => {
+    safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, (match, label, url) => {
         return `<a href="${url}" target="_blank" class="text-pink-500 font-bold hover:underline inline-flex items-center gap-0.5">${label}<span class="text-[10px] font-normal text-pink-400">↗</span></a>`;
     });
 
-    // @IDリンク（既存のスクロール機能はそのまま維持）
     safeText = safeText.replace(/@(\d+)/g, (match, id) => {
         const targetId = 'stream_' + id;
         const found = this.streams.find(s => s.id === targetId);
@@ -457,7 +449,6 @@ renderAdminNote(text) {
     return safeText;
 },
 
-// 🛠️【バグ修正】PC詳細：ハッシュタグを控えめな下線リンクにし、クリックイベントを確実に Alpine へ届ける
 renderCharNote(text) {
     if (!text) return '';
 
@@ -466,8 +457,6 @@ renderCharNote(text) {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 
-    // あらゆる空白・改行に対応して#タグをキャッチ。画面を邪魔しない「控えめな下線」スタイル
-    // クリックされたらグローバルイベント（Alpineの外側）を経由して、確実に検索を実行させます
     safeText = safeText.replace(/(#[^\s#\n\r]+)/g, (match) => {
         const tagName = match.substring(1).trim();
         return `<span onclick="window.dispatchEvent(new CustomEvent('execute-tag-search', {detail: '${tagName}'}))" class="text-slate-600 underline decoration-slate-400/60 hover:text-pink-600 hover:decoration-pink-500 font-semibold cursor-pointer select-none transition-colors">${match}</span>`;
@@ -476,7 +465,22 @@ renderCharNote(text) {
     return safeText;
 },
 
-// 🛠️【ハッシュタグ検索の心臓部】タグ検索を実行してモーダルを閉じる共通処理
+renderCharNote(text) {
+    if (!text) return '';
+
+    let safeText = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+    safeText = safeText.replace(/(#[^\s#\n\r]+)/g, (match) => {
+        const tagName = match.substring(1).trim();
+        return `<span onclick="window.dispatchEvent(new CustomEvent('execute-tag-search', {detail: '${tagName}'}))" class="text-slate-600 underline decoration-slate-400/60 hover:text-pink-600 hover:decoration-pink-500 font-semibold cursor-pointer select-none transition-colors">${match}</span>`;
+    });
+
+    return safeText;
+},
+
 searchByTag(tagName) {
     this.searchQuery = tagName;
     this.closeModal();
