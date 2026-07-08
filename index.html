@@ -3,109 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRPG Archive</title>
+    <title>コーサカTRPGまとめ [非公式]</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'M PLUS 1p', sans-serif;
+        }
+        /* html2canvas 撮影用スタジオのスタイル */
+        #dynamic-capture-studio .studio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 354px);
+            gap: 12px;
+            padding: 16px;
+            width: 780px;
+            background-color: #fff5f5;
+        }
+    </style>
 </head>
-<body class="bg-pink-50/30 text-slate-800 min-h-screen pb-12" x-data="initApp()" x-init="init()">
+<body class="bg-pink-50/30 text-slate-800 min-h-screen pb-12">
 
-    <div id="dynamic-capture-studio" class="fixed -top-[9999px] -left-[9999px] pointer-events-none"></div>
+    <div id="dynamic-capture-studio" class="fixed -top-[9999px] -left-[9999px] pointer-events-none z-[-1]"></div>
+
+    <div x-data="app()" x-init="init()" class="max-w-4xl mx-auto px-4 py-8">
+
+        <header class="text-center mb-8">
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center justify-center gap-2">
+                <span>コーサカTRPGまとめ</span>
+                <span class="text-xs font-normal text-pink-500 bg-pink-100 px-2 py-0.5 rounded-full">[非公式]</span>
+            </h1>
+        </header>
+
+        <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-pink-100 mb-6 space-y-4">
+            <div>
+                <input type="text" x-model="searchQuery" placeholder="シナリオ名、システム、PL、PC、GM名などで検索..." class="w-full px-4 py-2.5 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm">
+            </div>
+
+            <div class="flex flex-wrap gap-2 text-xs font-medium">
+                <button @click="toggleRole('gm')" :class="kosakaRole === 'gm' ? 'bg-pink-500 text-white' : 'bg-pink-50 text-pink-700 hover:bg-pink-100'" class="px-3 py-1.5 rounded-lg border border-pink-200 transition-colors">コーサカGMのみ</button>
+                <button @click="toggleRole('pl')" :class="kosakaRole === 'pl' ? 'bg-pink-500 text-white' : 'bg-pink-50 text-pink-700 hover:bg-pink-100'" class="px-3 py-1.5 rounded-lg border border-pink-200 transition-colors">コーサカPLのみ</button>
+
+                <button @click="toggleStatus('watched')" :class="selectedStatus === 'watched' ? 'bg-pink-500 text-white' : 'bg-pink-50 text-pink-700 hover:bg-pink-100'" class="px-3 py-1.5 rounded-lg border border-pink-200 transition-colors">視聴済み</button>
+                <button @click="toggleStatus('unwatched')" :class="selectedStatus === 'unwatched' ? 'bg-pink-500 text-white' : 'bg-pink-50 text-pink-700 hover:bg-pink-100'" class="px-3 py-1.5 rounded-lg border border-pink-200 transition-colors">未視聴</button>
+
+                <button @click="toggleFavoriteFilter()" :class="showFavoritesOnly ? 'bg-pink-500 text-white' : 'bg-pink-50 text-pink-700 hover:bg-pink-100'" class="px-3 py-1.5 rounded-lg border border-pink-200 transition-colors">★ お気に入りのみ</button>
+
+                <button @click="toggleSortOrder()" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition-colors ml-auto">
+                    日付 <span x-text="sortOrder === 'desc' ? '降順 (新しい順)' : '昇順 (古い順)'"></span>
+                </button>
+            </div>
+
+            <div x-show="showFavoritesOnly" class="pt-2 border-t border-pink-50 flex justify-end">
+                <button @click="downloadAsImage()" class="bg-pink-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm hover:bg-pink-700 transition-colors flex items-center gap-1.5">
+                    <span>お気に入り一覧を画像保存 (2列)</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <template x-for="stream in filteredStreams()" :key="stream.id">
+                <div class="bg-white rounded-2xl border border-pink-100 p-4 shadow-sm hover:shadow-md transition-shadow relative space-y-3">
+                    
+                    <div class="flex items-center justify-between border-b border-pink-50 pb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-pink-400"></div>
+                            <span class="text-xs text-slate-400 font-medium" x-text="stream.date"></span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <button @click="toggleWatched(stream.id)" class="hover:opacity-75 transition-opacity" :title="isWatched(stream.id) ? '未視聴にする' : '視聴済みにする'">
+                                <span x-text="isWatched(stream.id) ? '✅' : '⬜'"></span>
+                            </button>
+                            <button @click="toggleFavorite(stream.id)" class="hover:opacity-75 transition-opacity" :title="isFavorite(stream.id) ? 'お気に入り解除' : 'お気に入り追加'">
+                                <span x-text="isFavorite(stream.id) ? '★' : '☆'" :class="isFavorite(stream.id) ? 'text-amber-400' : 'text-slate-300'"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 items-center cursor-pointer" @click="openModal(stream)">
+                        <template x-if="getYoutubeId(stream.links)">
+                            <div class="w-28 shrink-0 aspect-video h-[64px] bg-pink-50 rounded-lg overflow-hidden border border-pink-100/60 shadow-sm">
+                                <img :src="`https://img.youtube.com/vi/${getYoutubeId(stream.links)}/mqdefault.jpg`" class="w-full h-full object-cover">
+                            </div>
+                        </template>
+                        <template x-if="!getYoutubeId(stream.links)">
+                            <div class="w-28 shrink-0 aspect-video h-[64px] bg-pink-50/50 rounded-lg flex items-center justify-center border border-pink-100/40">
+                                <span class="text-[10px] text-pink-300 font-bold">NO IMAGE</span>
+                            </div>
+                        </template>
+                        
+                        <div class="flex-1 min-w-0">
+                            <h2 class="font-bold text-slate-900 tracking-wide text-xs leading-snug break-words hover:text-pink-600 transition-colors" x-text="stream.scenario"></h2>
+                            <div class="mt-0.5"><span class="inline-block bg-slate-100 text-slate-500 text-[9px] px-1.5 py-0.5 rounded-md font-medium" x-text="stream.system"></span></div>
+                        </div>
+                    </div>
+
+                    <div class="text-[11px] text-slate-500 truncate pt-1">
+                        <span class="font-bold text-slate-400 mr-1">GM:</span>
+                        <span class="font-bold text-slate-700" x-text="stream.gm"></span>
+                    </div>
+
+                    <div class="bg-pink-50/20 rounded-xl p-2.5 text-[11px] border border-pink-50/50 flex flex-wrap gap-1 items-center">
+                        <span class="text-slate-400 font-bold mr-1 shrink-0">PL:</span>
+                        <div class="flex flex-wrap gap-1 flex-1 items-center">
+                            <template x-for="char in stream.characters">
+                                <span class="bg-white text-pink-700 text-[10px] font-medium px-1.5 py-1 rounded-md border border-pink-100 flex items-center justify-center leading-none text-center" x-text="char.plName ? `${char.plName}（${char.pcName}）` : char.pcName"></span>
+                            </template>
+                        </div>
+                    </div>
+
+                </div>
+            </template>
+        </div>
+
+        <div x-show="modalOpen" x-transition.opacity class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
+            <div @click.away="closeModal()" class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs text-pink-500 font-bold" x-text="activeStream.date"></span>
+                        <h2 class="text-lg font-bold text-slate-900 mt-1" x-text="activeStream.scenario"></h2>
+                    </div>
+                    <button @click="closeModal()" class="text-slate-400 hover:text-slate-600 font-bold text-xl px-2">✕</button>
+                </div>
+
+                <template x-if="activeStream.links && activeStream.links.length > 0">
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <template x-for="link in activeStream.links">
+                            <a :href="link.url" target="_blank" rel="noopener noreferrer" class="bg-pink-500 hover:bg-pink-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors inline-flex items-center gap-1">
+                                <span x-text="link.label || '視聴ページ'"></span>
+                                <span class="text-[10px]">↗</span>
+                            </a>
+                        </template>
+                    </div>
+                </template>
+
+                <template x-if="activeStream.adminNote">
+                    <div class="bg-slate-50 rounded-2xl p-4 text-xs space-y-1">
+                        <div class="font-bold text-slate-400">管理人メモ</div>
+                        <div class="text-slate-700 leading-relaxed break-words" x-html="renderAdminNote(activeStream.adminNote)"></div>
+                    </div>
+                </template>
+
+                <template x-if="activeStream.characters && activeStream.characters.some(c => c.note)">
+                    <div class="space-y-2 border-t border-slate-100 pt-3">
+                        <div class="text-xs font-bold text-slate-400">キャラクター備考</div>
+                        <template x-for="char in activeStream.characters">
+                            <template x-if="char.note">
+                                <div class="text-xs bg-pink-50/30 rounded-xl p-3 border border-pink-100/50">
+                                    <span class="font-bold text-pink-700" x-text="char.pcName"></span>
+                                    <span class="text-slate-400 text-[10px] ml-1" x-text="char.plName ? `(${char.plName})` : ''"></span>
+                                    <div class="mt-1 text-slate-600 break-words" x-html="renderCharNote(char.note)"></div>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+
+    </div>
 
     <script>
-        function initApp() {
+        function app() {
             return {
-                // --- データ定義（GitHub設定と状態） ---
-                username: 'na-nasika',      // ユーザー名
-                repoName: 'ktrpg-fan-db',      // リポジトリ名
-                streams: [],       // 配信データ配列
+                streams: [], // 外部JSONなどから読み込む配信データ配列
                 searchQuery: '',
-                startDate: '',
-                endDate: '',
                 kosakaRole: 'all',
                 selectedStatus: 'all',
-                showFavoritesOnly: false,
                 sortOrder: 'desc',
-                watchedIds: JSON.parse(localStorage.getItem('trpg_watched_ids') || '[]'),
-                favoriteIds: JSON.parse(localStorage.getItem('trpg_fav_ids') || '[]'),
+                showFavoritesOnly: false,
+                watchedIds: [],
+                favoriteIds: [],
                 modalOpen: false,
                 activeStream: {},
 
-                // --- 初期化 & JSONデータ自動取得 ---
-                async init() {
-                    // ローカルストレージに保存された設定があれば復元
-                    const savedUser = localStorage.getItem('trpg_github_user');
-                    const savedRepo = localStorage.getItem('trpg_github_repo');
-                    if (savedUser) this.username = savedUser;
-                    if (savedRepo) this.repoName = savedRepo;
+                init() {
+                    const savedWatched = localStorage.getItem('trpg_watched_ids');
+                    if (savedWatched) this.watchedIds = JSON.parse(savedWatched);
 
-                    if (this.username && this.repoName) {
-                        await this.fetchData();
-                    }
+                    const savedFavs = localStorage.getItem('trpg_fav_ids');
+                    if (savedFavs) this.favoriteIds = JSON.parse(savedFavs);
                 },
 
-                async fetchData() {
-                    if (!this.username || !this.repoName) return;
-                    
-                    // 設定を保存
-                    localStorage.setItem('trpg_github_user', this.username);
-                    localStorage.setItem('trpg_github_repo', this.repoName);
-
-                    const url = `https://raw.githubusercontent.com/${this.username}/${this.repoName}/main/data.json`;
-                    try {
-                        const response = await fetch(url);
-                        if (!response.ok) throw new Error('データの取得に失敗しました');
-                        this.streams = await response.json();
-                    } catch (error) {
-                        console.error('Data fetch error:', error);
-                        alert('JSONデータの読み込みに失敗しました。ユーザー名とリポジトリ名を確認してください。');
-                    }
-                },
-
-                // --- 修正機能 1 & 3: 管理者メモ・インラインリンク・@ID直リンク ---
+                /**
+                 * 1. renderAdminNote:
+                 * - Markdown風リンク [label](url) の厳密化
+                 * - @ID 形式を「該当YouTubeへの直接リンク」に変換
+                 */
                 renderAdminNote(text) {
                     if (!text) return '';
                     
-                    // 1. 基本的なHTMLエスケープ（XSS対策）
                     let safeText = text
                         .replace(/&/g, '&amp;')
                         .replace(/</g, '&lt;')
                         .replace(/>/g, '&gt;');
 
-                    // 2. セッション詳細のインラインリンク化 [ラベル](URL)
                     safeText = safeText.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, (match, label, url) => {
                         return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-pink-500 font-bold hover:underline inline-flex items-center gap-0.5">${label}<span class="text-[10px] font-normal text-pink-400">↗</span></a>`;
                     });
 
-                    // 3. @IDリンクの仕様変更（画面移動を廃止 ➡ 対象配信の1つ目のURLへ直接遷移）
                     safeText = safeText.replace(/@(\d+)/g, (match, id) => {
                         const targetId = 'stream_' + id;
                         const found = this.streams.find(s => s.id === targetId);
                         
                         if (found && found.links && found.links.length > 0) {
-                            const targetUrl = found.links[0].url;
-                            const titleText = found.scenario || `@${id}`;
-                            return `<a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="text-pink-500 font-bold underline hover:text-pink-700 inline-flex items-center gap-0.5">${titleText}<span class="text-[10px] font-normal text-pink-400">↗</span></a>`;
+                            const ytLink = found.links.find(l => l.url && (l.url.includes('youtube.com') || l.url.includes('youtu.be')));
+                            if (ytLink && ytLink.url) {
+                                const titleText = found.scenario || `@${id}`;
+                                return `<a href="${ytLink.url}" target="_blank" rel="noopener noreferrer" class="text-pink-500 font-bold underline hover:text-pink-700 select-none inline-flex items-center gap-0.5">${titleText}<span class="text-[10px] font-normal text-pink-400">↗</span></a>`;
+                            }
                         }
-                        
                         return `@${id}`;
                     });
 
                     return safeText;
                 },
 
-                // --- 修正機能 2: キャラクターメモ（ハッシュタグ検索削除・プレーン表示） ---
+                /**
+                 * 2. renderCharNote:
+                 * - ハッシュタグ処理を削除
+                 * - タグ記号（#）もそのまま表示する安全なプレーンテキスト化
+                 */
                 renderCharNote(text) {
                     if (!text) return '';
 
-                    // ハッシュタグ検索機能は削除し、単純で安全なテキストとしてエスケープのみ行う
                     return text
                         .replace(/&/g, '&amp;')
                         .replace(/</g, '&lt;')
                         .replace(/>/g, '&gt;');
                 },
 
-                // --- ユーティリティ & フィルター機能 ---
+                searchByTag(tagName) {
+                    this.searchQuery = tagName;
+                    this.closeModal();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+
                 getYoutubeId(links) {
                     if (!links || links.length === 0) return null;
                     const ytLink = links.find(l => l.url && (l.url.includes('youtube.com') || l.url.includes('youtu.be')));
@@ -216,7 +353,10 @@
                     localStorage.setItem('trpg_fav_ids', JSON.stringify(this.favoriteIds));
                 },
 
-                // --- 画像保存機能 ---
+                /**
+                 * 3. downloadAsImage:
+                 * - 元の二列スタジオ（354px x 2列）構造・デザインを完全に維持して画像出力
+                 */
                 async downloadAsImage() {
                     const studio = document.getElementById('dynamic-capture-studio');
                     if (!studio) return;
@@ -254,7 +394,7 @@
                         
                         const ytId = this.getYoutubeId(stream.links);
                         const thumbHtml = ytId 
-                            ? `<div class="w-28 shrink-0 aspect-video h-[64px] bg-pink-50 rounded-lg overflow-hidden border border-pink-100/60 shadow-sm"><img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg" crossorigin="anonymous" class="w-full h-full object-cover"></div>`
+                            ? `<div class="w-28 shrink-0 aspect-video h-[64px] bg-pink-50 rounded-lg overflow-hidden border border-pink-100/60 shadow-sm"><img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg" class="w-full h-full object-cover"></div>`
                             : `<div class="w-28 shrink-0 aspect-video h-[64px] bg-pink-50/50 rounded-lg flex items-center justify-center border border-pink-100/40"><span class="text-[10px] text-pink-300 font-bold">NO IMAGE</span></div>`;
                         
                         centerSection.innerHTML = thumbHtml;
@@ -314,7 +454,7 @@
                         });
                         
                         const link = document.createElement('a');
-                        link.download = `trpg_favorites_${new Date().toISOString().slice(0,10)}.png`;
+                        link.download = `kosaka_trpg_favorites_${new Date().toISOString().slice(0,10)}.png`;
                         link.href = canvas.toDataURL('image/png');
                         link.click();
                     } catch (error) {
@@ -325,7 +465,6 @@
                     }
                 },
 
-                // --- モーダル制御 ---
                 openModal(streamData) {
                     this.activeStream = streamData;
                     this.modalOpen = true;
@@ -335,7 +474,7 @@
                     this.modalOpen = false;
                     this.activeStream = {};
                 }
-            };
+            }
         }
     </script>
 </body>
