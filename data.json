@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026/07/10 08:05",
+  "updatedAt": "2026/07/10 08:12",
   "streams": [
     {
       "id": "stream_1",
@@ -818,7 +818,8 @@
       "relatedLinks": [
         {
           "label": "探索者歌合戦",
-          "url": "https://youtu.be/Km1ph9yGe54"
+          "url": "https://youtu.be/Km1ph9yGe54",
+          "comment": ""
         }
       ]
     },
@@ -1913,7 +1914,8 @@
       "relatedLinks": [
         {
           "label": "動画",
-          "url": "https://www.youtube.com/playlist?list=PLJvCA7dxm0SCwg2DJpStRFoCmanVkXZ4w"
+          "url": "https://www.youtube.com/playlist?list=PLJvCA7dxm0SCwg2DJpStRFoCmanVkXZ4w",
+          "comment": ""
         }
       ]
     },
@@ -1968,11 +1970,13 @@
       "relatedLinks": [
         {
           "label": "ミューフェス",
-          "url": "https://youtu.be/nDEw_Od7F6k"
+          "url": "https://youtu.be/nDEw_Od7F6k",
+          "comment": ""
         },
         {
           "label": "探索者歌合戦",
-          "url": "https://youtu.be/Km1ph9yGe54"
+          "url": "https://youtu.be/Km1ph9yGe54",
+          "comment": ""
         }
       ]
     },
@@ -2423,7 +2427,8 @@
       "relatedLinks": [
         {
           "label": "👻",
-          "url": "https://privatter.net/i/6225967"
+          "url": "https://privatter.net/i/6225967",
+          "comment": ""
         }
       ]
     },
@@ -2614,7 +2619,8 @@
       "relatedLinks": [
         {
           "label": "大悪党共犯者",
-          "url": "https://www.youtube.com/live/vZ8KIOde5tc?feature=share"
+          "url": "https://www.youtube.com/live/vZ8KIOde5tc?feature=share",
+          "comment": ""
         }
       ]
     },
@@ -3177,7 +3183,8 @@
       "relatedLinks": [
         {
           "label": "切り抜き",
-          "url": "https://youtu.be/GIAYgEM2MQ0?si=mHOlrgAkgrqxxJhE"
+          "url": "https://youtu.be/GIAYgEM2MQ0?si=mHOlrgAkgrqxxJhE",
+          "comment": ""
         }
       ]
     },
@@ -3638,7 +3645,8 @@
       "relatedLinks": [
         {
           "label": "ふせったー",
-          "url": "https://x.com/mzm_kosaka/status/1528767999406067713?s=20"
+          "url": "https://x.com/mzm_kosaka/status/1528767999406067713?s=20",
+          "comment": ""
         }
       ]
     },
@@ -6764,7 +6772,8 @@
       "relatedLinks": [
         {
           "label": "アンジョー絵",
-          "url": "https://x.com/mzm_anjo/status/1720016541918663014"
+          "url": "https://x.com/mzm_anjo/status/1720016541918663014",
+          "comment": ""
         }
       ]
     },
@@ -10700,8 +10709,9 @@
       "adminNote": "",
       "relatedLinks": [
         {
-          "label": "ショートストーリー（もある。）",
-          "url": "https://x.com/mzm_kosaka/status/1845782605112979590?s=20"
+          "label": "ショートストーリー",
+          "url": "https://x.com/mzm_kosaka/status/1845782605112979590?s=20",
+          "comment": "もある。"
         }
       ]
     },
